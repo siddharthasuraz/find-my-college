@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My College</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+        }
+
+        header {
+            background-color: #6200ea;
+            color: white;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            margin: 2rem auto;
+            max-width: 600px;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown {
+            margin: 1rem 0;
+        }
+
+        select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            color: white;
+            background-color: #6200ea;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #4500b0;
+        }
+
+        .results {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .college {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .college a {
+            text-decoration: none;
+            color: #6200ea;
+        }
+
+        .college a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Find My College</h1>
+    </header>
+
+    <div class="container">
+        <h2>Search for Colleges</h2>
+        <div class="dropdown">
+            <label for="degree">Select a Degree:</label>
+            <select id="degree" onchange="populateCourses()">
+                <option value="">-- Select a Degree --</option>
+                <option value="plus_two">+2</option>
+                <option value="bachelor">Bachelor's</option>
+                <option value="master">Master's</option>
+            </select>
+        </div>
+        <div class="dropdown">
+            <label for="course">Select a Course:</label>
+            <select id="course">
+                <option value="">-- Select a Course --</option>
+            </select>
+        </div>
+        <button onclick="searchColleges()">Search</button>
+
+        <div id="results" class="results"></div>
+    </div>
+
+    <script>
+        const degrees = {
+            plus_two: {
+                Science: ["College A", "College B", "College C"],
+                Management: ["College D", "College E", "College F"]
+            },
+            bachelor: {
+                BCA: ["College G", "College H", "College I"],
+                BBA: ["College J", "College K", "College L"],
+                BBM: ["College M", "College N", "College O"],
+                BSC_IT: ["College P", "College Q", "College R"]
+            },
+            master: {
+                MCA: ["College S", "College T", "College U"],
+                MBA: ["College V", "College W", "College X"],
+                MCS: ["College Y", "College Z", "College AA"]
+            }
+        };
+
+        function populateCourses() {
+            const degree = document.getElementById("degree").value;
+            const courseSelect = document.getElementById("course");
+
+            // Clear existing options
+            courseSelect.innerHTML = '<option value="">-- Select a Course --</option>';
+
+            if (degree && degrees[degree]) {
+                for (const course in degrees[degree]) {
+                    const option = document.createElement("option");
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                }
+            }
+        }
+
+        function searchColleges() {
+            const degree = document.getElementById("degree").value;
+            const course = document.getElementById("course").value;
+            const resultsDiv = document.getElementById("results");
+
+            // Clear previous results
+            resultsDiv.innerHTML = "";
+
+            if (degree && course && degrees[degree][course]) {
+                const list = degrees[degree][course]
+                    .map(
+                        (college) => `<div class='college'><a href='#'>${college}</a></div>`
+                    )
+                    .join("");
+
+                resultsDiv.innerHTML = `<h3>Colleges offering ${course}:</h3>` + list;
+            } else {
+                resultsDiv.innerHTML = "<p>Please select a valid degree and course.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
